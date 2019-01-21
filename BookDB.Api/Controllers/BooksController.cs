@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using BookDB.Api.Entites;
 using BookDB.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -21,28 +22,51 @@ namespace BookDB.Api.Controllers
         }
         // GET api/books
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<object>>> Get()
+        public ActionResult<IEnumerable<Book>> Get()
         {
-            var result = await _repository.GetAllBooksAsync();
+            var result = _repository.GetBooks();
             return Ok(result);
+        }
+
+        [HttpGet("{isbn}")]
+        public async Task<ActionResult<Book>> GetBook(string isbn)
+        {
+            var result = await _repository.GetBook(isbn);
+            if (result != null)
+            {
+                return Ok(result);
+            }
+            return NotFound();
         }
 
         // GET api/books/{ISBN}/copies
         [Route("{isbn}/copies")]
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<object>>> Get(string isbn)
+        public ActionResult<IEnumerable<BookCopy>> Get(string isbn)
         {
-            var q = from copy in await _repository.GetAllBookCopiesAsync()
-                    where copy.BookId == isbn
-                    select copy;
+            var q = _repository.GetBookCopies().Where(c => c.BookId == isbn);
 
-            return Ok(q.ToList());
+            return Ok(q);
         }
 
-        // POST api/values
+        // POST api/books
         [HttpPost]
-        public void Post([FromBody] string value)
+        public async Task<ActionResult> Post([FromBody] Book book)
         {
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    await _repository.AddBook(book);
+                    await _repository.SaveChangesAsync();
+                    return CreatedAtAction(nameof(GetBook), new { ISBN = book.ISBN }, book);
+                }
+                catch
+                {
+                    return BadRequest();
+                }
+            }
+            return BadRequest();
         }
 
         // PUT api/values/5

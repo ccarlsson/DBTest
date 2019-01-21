@@ -11,14 +11,26 @@ namespace BookDB.Services
         private readonly BookDbContext _context;
 
         public BookRepository(BookDbContext context) => _context = context;
-        public async Task<IEnumerable<Book>> GetAllBooksAsync()
+        public IEnumerable<Book> GetBooks()
         {
-            return await _context.Books.ToListAsync();
+            return _context.Books;
         }
 
-        public async Task<IEnumerable<BookCopy>> GetAllBookCopiesAsync()
+        public IEnumerable<BookCopy> GetBookCopies()
         {
-            return await _context.BookCopies.Include(bc => bc.Book).ToListAsync();
+            return _context.BookCopies.Include(bc => bc.Book);
         }
+
+        public async Task AddBook(Book book)
+        {
+            await _context.Books.AddAsync(book);
+        }
+
+        public async Task<int> SaveChangesAsync() =>
+            await _context.SaveChangesAsync();
+
+        public async Task<Book> GetBook(string isbn) =>
+            await _context.Books.SingleOrDefaultAsync(b => b.ISBN == isbn);
+
     }
 }

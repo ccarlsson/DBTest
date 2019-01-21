@@ -38,7 +38,7 @@ namespace BookDB.Services
                     ISBN = "9789140677105",
                     Title = "Programmering 1 Java",
                     Author = "Magnus Lilja, Ulrik Nilsson, Bo Silborn",
-                    ImageUrl = "https://s2.adlibris.com/images/2773237/programmering-1-c.jpg"
+                    ImageUrl = "https://s1.adlibris.com/images/966044/programmering-1-java.jpg"
                 });
 
             modelBuilder.Entity<BookCopy>().HasData(
