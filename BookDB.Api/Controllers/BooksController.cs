@@ -2,7 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using BookDB.Api.Entites;
+using BookDB.Services;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+
 
 namespace BookDB.Api.Controllers
 {
@@ -10,18 +14,30 @@ namespace BookDB.Api.Controllers
     [ApiController]
     public class BooksController : ControllerBase
     {
-        // GET api/values
-        [HttpGet]
-        public ActionResult<IEnumerable<string>> Get()
+        private readonly IBookRepository _repository;
+
+        public BooksController(IBookRepository repository)
         {
-            return new string[] { "value1", "value2" };
+            _repository = repository;
+        }
+        // GET api/books
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<object>>> Get()
+        {
+            var result = await _repository.GetAllBooksAsync();
+            return Ok(result);
         }
 
-        // GET api/values/5
-        [HttpGet("{id}")]
-        public ActionResult<string> Get(int id)
+        // GET api/books/{ISBN}/copies
+        [Route("{isbn}/copies")]
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<object>>> Get(string isbn)
         {
-            return "value";
+            var q = from copy in await _repository.GetAllBookCopiesAsync()
+                    where copy.BookId == isbn
+                    select copy;
+
+            return Ok(q.ToList());
         }
 
         // POST api/values

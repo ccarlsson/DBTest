@@ -11,12 +11,12 @@ namespace BookDB.Services
         private readonly BookDbContext _context;
 
         public BookRepository(BookDbContext context) => _context = context;
-        public async Task<IEnumerable<Book>> GetAllBooks()
+        public async Task<IEnumerable<Book>> GetAllBooksAsync()
         {
             return await _context.Books.ToListAsync();
         }
 
-        public async Task<IEnumerable<BookCopy>> GetAllBookCopies()
+        public async Task<IEnumerable<BookCopy>> GetAllBookCopiesAsync()
         {
             return await _context.BookCopies.Include(bc => bc.Book).ToListAsync();
         }

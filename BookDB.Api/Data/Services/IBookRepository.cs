@@ -6,7 +6,7 @@ namespace BookDB.Services
 {
     public interface IBookRepository
     {
-        Task<IEnumerable<Book>> GetAllBooks();
-        Task<IEnumerable<BookCopy>> GetAllBookCopies();
+        Task<IEnumerable<Book>> GetAllBooksAsync();
+        Task<IEnumerable<BookCopy>> GetAllBookCopiesAsync();
     }
 }
