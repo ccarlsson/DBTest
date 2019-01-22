@@ -31,6 +31,7 @@ namespace BookDB.Api
             var connectionString = Configuration.GetConnectionString("Sqlite");
             services.AddDbContext<BookDbContext>(options => options.UseSqlite(connectionString));
             services.AddScoped<IBookRepository, BookRepository>();
+            services.AddScoped<ICustomerRepository, CustomerRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
