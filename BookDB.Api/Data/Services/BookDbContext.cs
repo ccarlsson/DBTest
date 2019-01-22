@@ -18,6 +18,13 @@ namespace BookDB.Services
 
             modelBuilder.Entity<BookCopy>().HasKey(copy => new { copy.BookId, copy.CopyNumber });
 
+            modelBuilder.Entity<Group>().HasKey(g => g.GroupId);
+            modelBuilder.Entity<Group>().Property(g => g.GroupName).IsRequired();
+
+            modelBuilder.Entity<Customer>().HasKey(c => c.CustomerId);
+            modelBuilder.Entity<Customer>().Property(c => c.Firstname).IsRequired();
+            modelBuilder.Entity<Customer>().Property(c => c.Lastname).IsRequired();
+
             modelBuilder.Entity<Book>().HasData(
                 new Book
                 {
