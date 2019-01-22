@@ -9,6 +9,8 @@ namespace BookDB.Services
         public BookDbContext(DbContextOptions<BookDbContext> options) : base(options) { }
         public DbSet<Book> Books { get; set; }
         public DbSet<BookCopy> BookCopies { get; set; }
+        public DbSet<Customer> Customers { get; set; }
+        public DbSet<Group> Groups { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
